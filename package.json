@@ -1,0 +1,46 @@
+{
+  "name": "next-http-controller",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "jest"
+  },
+  "keywords": [
+    "next.js",
+    "API handler",
+    "controller",
+    "next.js 14",
+    "next.js 15",
+    "tsup",
+    "zod",
+    "api router",
+    "typescript",
+    "nextjs-controller",
+    "api development",
+    "app router"
+  ],
+  "author": "Pedro Ricardo",
+  "license": "ISC",
+  "description": "A utility library designed for building scalable and error-resilient HTTP controllers and route handlers in Next.js. It provides easy-to-use wrappers for handling API requests, authorization, validation errors, and custom responses, specifically for the App Router and route handler architecture.",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.3.5",
+    "typedoc": "^0.27.6",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "next": "^14.2.15",
+    "next-http-controller": "file:",
+    "next-router-controller": "file:",
+    "zod": "^3.23.8"
+  }
+}
