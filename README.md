@@ -19,6 +19,6 @@ npm install next-http-controller
 
 ## Contributors
 
-<a href="https://github.com/phricardo/next-router-controller/graphs/contributors">
-  <img src="https://contributors-img.web.app/image?repo=phricardo/next-router-controller&max=500" alt="Contributors" />
+<a href="https://github.com/phricardo/next-http-controller/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=phricardo/next-http-controller&max=500" alt="Contributors" />
 </a>
