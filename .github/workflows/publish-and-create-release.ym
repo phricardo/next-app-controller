@@ -1,0 +1,83 @@
+name: Publish and Create Release for Node.js Package
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+          
+      # Check if NPM_AUTH_TOKEN is set in the secrets
+      - name: Check if NPM_AUTH_TOKEN is set
+        run: |
+          if [ -z "${{ secrets.NPM_AUTH_TOKEN }}" ]; then
+            echo "Error: NPM_AUTH_TOKEN is not set!"
+            exit 1
+          else
+            echo "NPM_AUTH_TOKEN is set."
+          fi    
+          
+      # Extract the current version from package.json and store it in the environment
+      - name: Extract package version
+        id: get_version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_ENV
+        
+      # Fetch the latest version of the package from the npm registry  
+      - name: Fetch latest version from NPM registry
+        run: |
+          if npm show $(jq -r .name package.json) --json &>/dev/null; then
+            latest_version=$(npm show $(jq -r .name package.json) time --json 2>/dev/null | jq -r 'to_entries | max_by(.value) | .key')
+            echo "The package exists in the npm registry."
+          else
+            latest_version="0.0.0"
+            echo "The package does not exist in the npm registry."
+          fi
+          echo "latest_version=$latest_version" >> $GITHUB_ENV
+          echo "The latest version of the package is: $latest_version"
+
+      # Compare the versions to determine if the package should be published
+      - name: Compare versions and decide whether to publish
+        id: compare_versions
+        run: |
+          if [ "$latest_version" == "0.0.0" ]; then
+            echo "Version is 0.0.0, proceeding with publish."
+            echo "should_publish=true" >> $GITHUB_ENV
+          elif [ "$(echo ${{ env.version }} | tr -d '[:space:]')" == "$latest_version" ]; then
+            echo "Version is equal to the latest version, skipping publish."
+            echo "should_publish=false" >> $GITHUB_ENV
+          elif [ "$(echo ${{ env.version }} | tr -d '[:space:]')" \< "$latest_version" ]; then
+            echo "Current version is less than the latest version, skipping publish."
+            echo "should_publish=false" >> $GITHUB_ENV
+          else
+            echo "Proceeding with publish."
+            echo "should_publish=true" >> $GITHUB_ENV
+          fi
+
+      # # Publish the package to npm if the version is newer
+      - name: Publish to npm
+        if: env.should_publish == 'true'
+        run: |
+          npm ci --include=dev
+          npm run build
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      
+      # # Create a GitHub release if the version is newer
+      - name: Create GitHub Release
+        if: env.should_publish == 'true'
+        uses: actions/create-release@v1
+        with:
+          tag_name: "latest"
+          release_name: "v${{ env.version }}"
+          body: "Automatically created release for version v${{ env.version }}."
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
