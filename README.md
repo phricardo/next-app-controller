@@ -1,4 +1,4 @@
-# next-http-controller
+![next-app-controller](./.github/logos/logo_repo.png "Next App Controller")
 
 A simple library to streamline the creation and organization of **API route handlers** in Next.js. It provides an efficient way to structure and manage API routes, making them reusable and easy to scale.
 
@@ -11,14 +11,14 @@ A simple library to streamline the creation and organization of **API route hand
 
 ## Installation
 
-To install `next-http-controller`, use npm or yarn:
+To install `next-app-controller`, use npm or yarn:
 
 ```bash
-npm install next-http-controller
+npm install next-app-controller
 ```
 
 ## Contributors
 
-<a href="https://github.com/phricardo/next-http-controller/graphs/contributors">
-  <img src="https://contributors-img.web.app/image?repo=phricardo/next-http-controller&max=500" alt="Contributors" />
+<a href="https://github.com/phricardo/next-app-controller/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=phricardo/next-app-controller&max=500" alt="Contributors" />
 </a>
