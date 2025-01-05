@@ -1,6 +1,10 @@
 {
   "name": "next-app-controller",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phricardo/next-app-controller.git"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
