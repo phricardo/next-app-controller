@@ -21,6 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Additional Terms:
+
 1. You may use, modify, and distribute the Software for commercial purposes.
 2. Contributions to the Software are welcomed and encouraged.
 3. You may not redistribute the modified version of the Software under a different name or in a way that implies the work was created or endorsed by anyone other than the original author(s) or direct contributors to the package.

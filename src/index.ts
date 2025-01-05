@@ -39,7 +39,7 @@ class CustomHeaders extends Headers {
       cookieHeader.split(";").map((cookie) => {
         const [key, value] = cookie.split("=").map((part) => part.trim());
         return [key, decodeURIComponent(value)];
-      })
+      }),
     );
   }
 }
@@ -68,8 +68,8 @@ interface HandlerResponse {
  */
 export function controller<T extends HandlerResponse | NextResponse>(
   handler: (
-    ctx: ControllerContext<T>
-  ) => Promise<HandlerResponse | NextResponse>
+    ctx: ControllerContext<T>,
+  ) => Promise<HandlerResponse | NextResponse>,
 ) {
   /**
    * Main request handler.
@@ -79,11 +79,11 @@ export function controller<T extends HandlerResponse | NextResponse>(
    */
   const handleRequest = async (
     request: NextRequest,
-    context: { params?: Record<string, string> }
+    context: { params?: Record<string, string> },
   ): Promise<Response> => {
     const params = context.params || {};
     const searchParams = Object.fromEntries(
-      request.nextUrl.searchParams.entries()
+      request.nextUrl.searchParams.entries(),
     );
 
     const requestBody: T | undefined =
@@ -123,11 +123,11 @@ export function controller<T extends HandlerResponse | NextResponse>(
    * @returns A handler with authorization.
    */
   handleRequest.authorize = function (
-    authorizationCheck: (token: string) => boolean | Promise<boolean>
+    authorizationCheck: (token: string) => boolean | Promise<boolean>,
   ) {
     return async (
       request: NextRequest,
-      context: { params?: Record<string, string> }
+      context: { params?: Record<string, string> },
     ) => {
       try {
         const token = getAuthorizationToken(request);
@@ -137,7 +137,7 @@ export function controller<T extends HandlerResponse | NextResponse>(
           throw new ControllerError(
             "UNAUTHORIZED",
             "Unauthorized resource access",
-            HttpStatus.UNAUTHORIZED
+            HttpStatus.UNAUTHORIZED,
           );
         }
 

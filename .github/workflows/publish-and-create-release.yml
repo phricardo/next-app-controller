@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-          
+
       # Check if NPM_AUTH_TOKEN is set in the secrets
       - name: Check if NPM_AUTH_TOKEN is set
         run: |
@@ -21,14 +21,14 @@ jobs:
             exit 1
           else
             echo "NPM_AUTH_TOKEN is set."
-          fi    
-          
+          fi
+
       # Extract the current version from package.json and store it in the environment
       - name: Extract package version
         id: get_version
         run: echo "version=$(jq -r .version package.json)" >> $GITHUB_ENV
-        
-      # Fetch the latest version of the package from the npm registry  
+
+      # Fetch the latest version of the package from the npm registry
       - name: Fetch latest version from NPM registry
         run: |
           if npm show $(jq -r .name package.json) --json &>/dev/null; then
@@ -68,7 +68,7 @@ jobs:
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-      
+
       # # Create a GitHub release if the version is newer
       - name: Create GitHub Release
         if: env.should_publish == 'true'

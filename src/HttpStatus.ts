@@ -85,7 +85,7 @@ export class HttpStatus {
    * @returns An object containing the status code and its description, or `undefined` if the code is invalid.
    */
   static getStatusWithText(
-    statusCode: number
+    statusCode: number,
   ): { status: HttpStatusEnum; text: string } | undefined {
     const status = this.fromCode(statusCode);
     if (status) {
