@@ -30,18 +30,19 @@ jobs:
         id: get_version
         run: echo "version=$(jq -r .version package.json)" >> $GITHUB_ENV
 
+  
       # Fetch the latest version of the package from the npm registry
       - name: Fetch latest version from NPM registry
         run: |
-          if npm show $(jq -r .name package.json) --json &>/dev/null; then
-            latest_version=$(npm show $(jq -r .name package.json) time --json 2>/dev/null | jq -r 'to_entries | max_by(.value) | .key')
-            echo "The package exists in the npm registry."
-          else
+          latest_version=$(npm show $(jq -r .name package.json) dist-tags.latest)
+          if [ -z "$latest_version" ]; then
             latest_version="0.0.0"
             echo "The package does not exist in the npm registry."
+          else
+            echo "The package exists in the npm registry. Latest version: $latest_version"
           fi
           echo "latest_version=$latest_version" >> $GITHUB_ENV
-          echo "The latest version of the package is: $latest_version"
+
 
       # Compare the versions to determine if the package should be published
       - name: Compare versions and decide whether to publish
@@ -50,16 +51,17 @@ jobs:
           if [ "$latest_version" == "0.0.0" ]; then
             echo "Version is 0.0.0, proceeding with publish."
             echo "should_publish=true" >> $GITHUB_ENV
-          elif [ "$(echo ${{ env.version }} | tr -d '[:space:]')" == "$latest_version" ]; then
+          elif [ "${{ env.version }}" == "$latest_version" ]; then
             echo "Version is equal to the latest version, skipping publish."
             echo "should_publish=false" >> $GITHUB_ENV
-          elif [ "$(echo ${{ env.version }} | tr -d '[:space:]')" \< "$latest_version" ]; then
+          elif [ "$(printf '%s\n' "${{ env.version }}" "$latest_version" | sort -V | head -n1)" == "$latest_version" ]; then
+            echo "Current version is greater than the latest version, proceeding with publish."
+            echo "should_publish=true" >> $GITHUB_ENV
+          else
             echo "Current version is less than the latest version, skipping publish."
             echo "should_publish=false" >> $GITHUB_ENV
-          else
-            echo "Proceeding with publish."
-            echo "should_publish=true" >> $GITHUB_ENV
           fi
+
 
       # # Publish the package to npm if the version is newer
       - name: Publish to npm
