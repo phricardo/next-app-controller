@@ -39,7 +39,7 @@ jobs:
             latest_version="0.0.0"
             echo "The package does not exist in the npm registry."
           else
-            echo "The package exists in the npm registry. Latest version: $latest_version"
+            echo "The package exists in the npm registry. npm package version: $latest_version"
           fi
           echo "latest_version=$latest_version" >> $GITHUB_ENV
 
